@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Web-to-Case Form</title>
+</head>
+<body>
+  <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
+
+    <input type="hidden" name="orgid" value="00DWA000002ckDZ">
+    <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
+
+    <label for="email">Email</label>
+    <input id="email" maxlength="80" name="email" size="20" type="text"><br>
+
+    <label for="phone">Phone</label>
+    <input id="phone" maxlength="40" name="phone" size="20" type="text"><br>
+
+    <label for="subject">Subject</label>
+    <input id="subject" maxlength="80" name="subject" size="20" type="text"><br>
+
+    <label for="orderDate">Order Date</label>
+    <input id="orderDate" type="date"><br>
+
+    <!-- Hidden field that Salesforce will receive -->
+    <input type="hidden" id="sfDateField" name="00N0V000009TcNV">
+
+    <input type="hidden" id="external" name="external" value="1"><br>
+
+    <input type="submit" name="submit">
+  </form>
+
+  <script>
+    document.getElementById("webToCaseForm").addEventListener("submit", function () {
+      const dateInput = document.getElementById("orderDate");
+      const hiddenField = document.getElementById("sfDateField");
+
+      if (dateInput.value) {
+
+        const d = new Date(dateInput.value);
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        const yyyy = d.getFullYear();
+
+        const formatted = `${mm}/${dd}/${yyyy}`;
+        hiddenField.value = formatted;
+      }
+    });
+  </script>
+</body>
+</html>
