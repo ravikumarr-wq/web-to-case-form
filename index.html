@@ -31,6 +31,11 @@
   </form>
 
   <script>
+  
+	 window.onload = function() {
+		alert("User came from: " + document.referrer);
+	  };
+  
     document.getElementById("webToCaseForm").addEventListener("submit", function () {
       const dateInput = document.getElementById("orderDate");
       const hiddenField = document.getElementById("sfDateField");
