@@ -2,49 +2,132 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Web-to-Case Form</title>
+  <title>Accredited Course Presentation Request - Siding</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .form-container {
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #333;
+    }
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    input[type="submit"] {
+      background: #0066cc;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    input[type="submit"]:hover {
+      background: #0055aa;
+    }
+  </style>
 </head>
 <body>
-  <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
+  <div class="form-container">
+    <h2>Accredited Course Presentation Request - Siding</h2>
+    <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
 
-    <input type="hidden" name="orgid" value="00DWA000002ckDZ">
-    <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
+    <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
 
-    <label for="email">Email</label>
-    <input id="email" maxlength="80" name="email" size="20" type="text"><br>
+      <input type="hidden" name="orgid" value="00DWA000002ckDZ">
+      <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
 
-    <label for="phone">Phone</label>
-    <input id="phone" maxlength="40" name="phone" size="20" type="text"><br>
+      <!-- Picklist -->
+      <label for="00NWA000002EHnp">Which Siding Course Seminar are you Requesting?</label>
+      <select id="00NWA000002EHnp" name="00NWA000002EHnp">
+        <option value="">--None--</option>
+        <option value="Vinyl Siding: The Basics and Beyond (BSP15)">Vinyl Siding: The Basics and Beyond (BSP15)</option>
+        <option value="Flexible Flashing Tapes (SDG24_1)">Flexible Flashing Tapes (SDG24_1)</option>
+        <option value="Fully Adhered Water Resistive Barriers (SDG24_2)">Fully Adhered Water Resistive Barriers (SDG24_2)</option>
+        <option value="Specifying Fully Adhered Weather Protection Systems (RBE24_1)">Specifying Fully Adhered Weather Protection Systems (RBE24_1)</option>
+        <option value="Design and Installation Ideas with Cellular PVC (BSP61_A3)">Design and Installation Ideas with Cellular PVC (BSP61_A3)</option>
+      </select>
 
-    <label for="subject">Subject</label>
-    <input id="subject" maxlength="80" name="subject" size="20" type="text"><br>
+      <label for="00N3w000008x6NN">Your Name *</label>
+      <input id="00N3w000008x6NN" maxlength="80" name="00N3w000008x6NN" type="text" required>
 
-    <label for="orderDate">Order Date</label>
-    <input id="orderDate" type="date"><br>
+      <label for="00N3w000008x6NX">Your Email *</label>
+      <input id="00N3w000008x6NX" maxlength="80" name="00N3w000008x6NX" type="email" required>
 
-    <!-- Hidden field that Salesforce will receive -->
-    <input type="hidden" id="sfDateField" name="00N0V000009TcNV">
+      <label for="phone">Your Phone Number *</label>
+      <input id="phone" maxlength="40" name="phone" type="tel" required>
 
-    <input type="hidden" id="external" name="external" value="1"><br>
+      <label for="00NWA000002EHe9">Firm/Business Name *</label>
+      <input id="00NWA000002EHe9" maxlength="80" name="00NWA000002EHe9" type="text" required>
 
-    <input type="submit" name="submit">
-  </form>
+      <label for="00N0V000008zRGv">Firm Address including city/state *</label>
+      <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
 
-  <script>  
+      <label for="00NWA000002EHhN">Approximate Number of Attendees</label>
+      <input id="00NWA000002EHhN" name="00NWA000002EHhN" type="number" min="0">
+
+      <label for="startDate">Presentation Start Date</label>
+      <input id="startDate" type="date">
+      <input type="hidden" id="sfStartDate" name="00NWA000002EHkb">
+
+      <label for="endDate">Presentation End Date</label>
+      <input id="endDate" type="date">
+      <input type="hidden" id="sfEndDate" name="00NWA000002EHmD">
+
+      <input type="hidden" id="external" name="external" value="1">
+
+      <input type="submit" value="Submit Request">
+    </form>
+  </div>
+
+  <script>
     document.getElementById("webToCaseForm").addEventListener("submit", function () {
-      const dateInput = document.getElementById("orderDate");
-      const hiddenField = document.getElementById("sfDateField");
-
-      if (dateInput.value) {
-
-        const d = new Date(dateInput.value);
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        const yyyy = d.getFullYear();
-
-        const formatted = `${mm}/${dd}/${yyyy}`;
-        hiddenField.value = formatted;
+      function formatDate(inputId, hiddenId) {
+        const dateInput = document.getElementById(inputId);
+        const hiddenField = document.getElementById(hiddenId);
+        if (dateInput.value) {
+          const d = new Date(dateInput.value);
+          const mm = String(d.getMonth() + 1).padStart(2, "0");
+          const dd = String(d.getDate()).padStart(2, "0");
+          const yyyy = d.getFullYear();
+          hiddenField.value = `${mm}/${dd}/${yyyy}`;
+        }
       }
+      formatDate("startDate", "sfStartDate");
+      formatDate("endDate", "sfEndDate");
     });
   </script>
 </body>
