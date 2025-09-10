@@ -38,13 +38,29 @@
       margin-top: 15px;
       margin-bottom: 5px;
     }
-    input, select {
+    .required::after {
+      content: " *";
+      color: red;
+    }
+    input, select, textarea {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
       border-radius: 4px;
       border: 1px solid #ccc;
       font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .char-counter {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 10px;
     }
     input[type="submit"] {
       background: #0066cc;
@@ -57,6 +73,13 @@
     }
     input[type="submit"]:hover {
       background: #0055aa;
+    }
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      display: none;
     }
   </style>
 </head>
@@ -71,8 +94,8 @@
       <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
 
       <!-- Picklist -->
-      <label for="00NWA000002EHnp">Which Siding Course Seminar are you Requesting?</label>
-      <select id="00NWA000002EHnp" name="00NWA000002EHnp">
+      <label for="00NWA000002EHnp" class="required">Which Siding Course Seminar are you Requesting?</label>
+      <select id="00NWA000002EHnp" name="00NWA000002EHnp" required>
         <option value="">--None--</option>
         <option value="Vinyl Siding: The Basics and Beyond (BSP15)">Vinyl Siding: The Basics and Beyond (BSP15)</option>
         <option value="Flexible Flashing Tapes (SDG24_1)">Flexible Flashing Tapes (SDG24_1)</option>
@@ -81,53 +104,81 @@
         <option value="Design and Installation Ideas with Cellular PVC (BSP61_A3)">Design and Installation Ideas with Cellular PVC (BSP61_A3)</option>
       </select>
 
-      <label for="00N3w000008x6NN">Your Name *</label>
+      <label for="00N3w000008x6NN" class="required">Your Name</label>
       <input id="00N3w000008x6NN" maxlength="80" name="00N3w000008x6NN" type="text" required>
 
-      <label for="00N3w000008x6NX">Your Email *</label>
+      <label for="00N3w000008x6NX" class="required">Your Email</label>
       <input id="00N3w000008x6NX" maxlength="80" name="00N3w000008x6NX" type="email" required>
 
-      <label for="phone">Your Phone Number *</label>
+      <label for="phone" class="required">Your Phone Number</label>
       <input id="phone" maxlength="40" name="phone" type="tel" required>
 
-      <label for="00NWA000002EHe9">Firm/Business Name *</label>
+      <label for="00NWA000002EHe9" class="required">Firm/Business Name</label>
       <input id="00NWA000002EHe9" maxlength="80" name="00NWA000002EHe9" type="text" required>
 
-      <label for="00N0V000008zRGv">Firm Address including city/state *</label>
+      <label for="00N0V000008zRGv" class="required">Firm Address including city/state</label>
       <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
 
       <label for="00NWA000002EHhN">Approximate Number of Attendees</label>
       <input id="00NWA000002EHhN" name="00NWA000002EHhN" type="number" min="0">
 
-      <label for="startDate">Presentation Start Date</label>
-      <input id="startDate" type="date">
+      <label class="required">Dates for Presentation</label>
+      <p style="font-size:12px; color:#666; margin-top:-10px;">Please supply a preferred date range for in-person session.</p>
+      <input id="startDate" type="date" required> → 
+      <input id="endDate" type="date" required>
       <input type="hidden" id="sfStartDate" name="00NWA000002EHkb">
-
-      <label for="endDate">Presentation End Date</label>
-      <input id="endDate" type="date">
       <input type="hidden" id="sfEndDate" name="00NWA000002EHmD">
+      <div id="dateError" class="error">Start Date cannot be later than End Date.</div>
+
+      <label for="00NVm000003SjdM">Additional Comments</label>
+      <textarea id="00NVm000003SjdM" name="00NVm000003SjdM" maxlength="2000"></textarea>
+      <div id="charCounter" class="char-counter">0/2000</div>
 
       <input type="hidden" id="external" name="external" value="1">
 
-      <input type="submit" value="Submit Request">
+      <input type="submit" value="Submit">
     </form>
   </div>
 
   <script>
-    document.getElementById("webToCaseForm").addEventListener("submit", function () {
-      function formatDate(inputId, hiddenId) {
-        const dateInput = document.getElementById(inputId);
-        const hiddenField = document.getElementById(hiddenId);
-        if (dateInput.value) {
-          const d = new Date(dateInput.value);
+    // Character counter for comments
+    const comments = document.getElementById("00NVm000003SjdM");
+    const counter = document.getElementById("charCounter");
+    comments.addEventListener("input", () => {
+      counter.textContent = `${comments.value.length}/2000`;
+    });
+
+    // Format date + validation
+    document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
+      const startDate = document.getElementById("startDate");
+      const endDate = document.getElementById("endDate");
+      const dateError = document.getElementById("dateError");
+
+      if (startDate.value && endDate.value) {
+        const sDate = new Date(startDate.value);
+        const eDate = new Date(endDate.value);
+
+        if (sDate > eDate) {
+          e.preventDefault();
+          dateError.style.display = "block";
+          return;
+        } else {
+          dateError.style.display = "none";
+        }
+      }
+
+      function formatDate(input, hidden) {
+        if (input.value) {
+          const d = new Date(input.value);
           const mm = String(d.getMonth() + 1).padStart(2, "0");
           const dd = String(d.getDate()).padStart(2, "0");
           const yyyy = d.getFullYear();
-          hiddenField.value = `${mm}/${dd}/${yyyy}`;
+          hidden.value = `${mm}/${dd}/${yyyy}`;
         }
       }
-      formatDate("startDate", "sfStartDate");
-      formatDate("endDate", "sfEndDate");
+
+      formatDate(startDate, document.getElementById("sfStartDate"));
+      formatDate(endDate, document.getElementById("sfEndDate"));
     });
   </script>
 </body>
