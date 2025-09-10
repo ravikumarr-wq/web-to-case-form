@@ -70,6 +70,7 @@
       margin-top: 15px;
       font-size: 16px;
       font-weight: bold;
+      padding: 12px;
     }
     input[type="submit"]:hover {
       background: #0055aa;
@@ -80,6 +81,25 @@
       margin-top: -5px;
       margin-bottom: 10px;
       display: none;
+    }
+    /* New styles for date fields */
+    .date-range-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .date-field {
+      flex: 1;
+    }
+    .date-arrow {
+      color: #666;
+      font-weight: bold;
+    }
+    .date-instruction {
+      font-size: 12px;
+      color: #666;
+      margin-top: -8px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -123,9 +143,16 @@
       <input id="00NWA000002EHhN" name="00NWA000002EHhN" type="number" min="0">
 
       <label class="required">Dates for Presentation</label>
-      <p style="font-size:12px; color:#666; margin-top:-10px;">Please supply a preferred date range for in-person session.</p>
-      <input id="startDate" type="date" required> → 
-      <input id="endDate" type="date" required>
+      <div class="date-instruction">Please supply a preferred date range for in-person session.</div>
+      <div class="date-range-container">
+        <div class="date-field">
+          <input id="startDate" type="date" required>
+        </div>
+        <div class="date-arrow">→</div>
+        <div class="date-field">
+          <input id="endDate" type="date" required>
+        </div>
+      </div>
       <input type="hidden" id="sfStartDate" name="00NWA000002EHkb">
       <input type="hidden" id="sfEndDate" name="00NWA000002EHmD">
       <div id="dateError" class="error">Start Date cannot be later than End Date.</div>
@@ -141,14 +168,13 @@
   </div>
 
   <script>
-    // Character counter for comments
+
     const comments = document.getElementById("00NVm000003SjdM");
     const counter = document.getElementById("charCounter");
     comments.addEventListener("input", () => {
       counter.textContent = `${comments.value.length}/2000`;
     });
 
-    // Format date + validation
     document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
       const startDate = document.getElementById("startDate");
       const endDate = document.getElementById("endDate");
