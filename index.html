@@ -105,10 +105,6 @@
       <input type="hidden" name="orgid" value="00DWA000002ckDZ">
       <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
 
-      <!-- Read-only Auto-filled Course Name -->
-      <label for="courseName">Selected Course</label>
-      <input id="courseName" name="courseName" type="text" readonly style="background:#eee; font-weight:bold;">
-
       <!-- Picklist -->
       <label for="00NWA000002EHnp" class="required">Which Siding Course Seminar are you Requesting?</label>
       <select id="00NWA000002EHnp" name="00NWA000002EHnp" required>
@@ -132,6 +128,7 @@
       <label for="00NWA000002EHe9" class="required">Firm/Business Name</label>
       <input id="00NWA000002EHe9" maxlength="80" name="00NWA000002EHe9" type="text" required>
 
+      <!-- This field now stores course selection -->
       <label for="00N0V000008zRGv" class="required">Firm Address including city/state</label>
       <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
 
@@ -161,30 +158,41 @@
   </div>
 
 <script>
-  // Character counter
   const comments = document.getElementById("00NVm000003SjdM");
   const counter = document.getElementById("charCounter");
   comments.addEventListener("input", () => {
     counter.textContent = `${comments.value.length}/2000`;
   });
 
-  // URL param auto-fill course name
+  // URL course parameter logic - auto select or append dynamically
   const urlParams = new URLSearchParams(window.location.search);
   const courseValue = urlParams.get("course");
-  if (courseValue) {
-    document.getElementById("courseName").value = courseValue;
 
-    // Auto-select picklist if matching value exists
+  if (courseValue) {
     const picklist = document.getElementById("00NWA000002EHnp");
+    let matchFound = false;
+
     for (let option of picklist.options) {
-      if (option.value === courseValue) {
+      if (option.value.toLowerCase().trim() === courseValue.toLowerCase().trim()) {
         option.selected = true;
+        matchFound = true;
         break;
       }
     }
+
+    if (!matchFound) {
+      const newOption = document.createElement("option");
+      newOption.value = courseValue;
+      newOption.textContent = courseValue + " (Custom)";
+      newOption.selected = true;
+      picklist.appendChild(newOption);
+    }
+
+    // Store course value into Firm Address field
+    document.getElementById("00N0V000008zRGv").value = courseValue;
   }
 
-  // Date validation and formatting
+  // Date validation & Salesforce format
   document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
