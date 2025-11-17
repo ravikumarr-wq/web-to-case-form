@@ -82,26 +82,19 @@
       margin-bottom: 10px;
       display: none;
     }
-    /* New styles for date fields */
     .date-range-container {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .date-field {
-      flex: 1;
-    }
-    .date-arrow {
-      color: #666;
-      font-weight: bold;
-    }
+    .date-field { flex: 1; }
+    .date-arrow { color: #666; font-weight: bold; }
     .date-instruction {
-      font-size: 12px;
-      color: #666;
-      margin-top: -8px;
-      margin-bottom: 8px;
+      font-size: 12px; color: #666;
+      margin-top: -8px; margin-bottom: 8px;
     }
   </style>
+
 </head>
 <body>
   <div class="form-container">
@@ -109,9 +102,12 @@
     <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
 
     <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
-
       <input type="hidden" name="orgid" value="00DWA000002ckDZ">
       <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
+
+      <!-- Read-only Auto-filled Course Name -->
+      <label for="courseName">Selected Course</label>
+      <input id="courseName" name="courseName" type="text" readonly style="background:#eee; font-weight:bold;">
 
       <!-- Picklist -->
       <label for="00NWA000002EHnp" class="required">Which Siding Course Seminar are you Requesting?</label>
@@ -144,15 +140,13 @@
 
       <label class="required">Dates for Presentation</label>
       <div class="date-instruction">Please supply a preferred date range for in-person session.</div>
+
       <div class="date-range-container">
-        <div class="date-field">
-          <input id="startDate" type="date" required>
-        </div>
+        <div class="date-field"><input id="startDate" type="date" required></div>
         <div class="date-arrow">→</div>
-        <div class="date-field">
-          <input id="endDate" type="date" required>
-        </div>
+        <div class="date-field"><input id="endDate" type="date" required></div>
       </div>
+
       <input type="hidden" id="sfStartDate" name="00NWA000002EHkb">
       <input type="hidden" id="sfEndDate" name="00NWA000002EHmD">
       <div id="dateError" class="error">Start Date cannot be later than End Date.</div>
@@ -162,50 +156,66 @@
       <div id="charCounter" class="char-counter">0/2000</div>
 
       <input type="hidden" id="external" name="external" value="1">
-
       <input type="submit" value="Submit">
     </form>
   </div>
 
-  <script>
+<script>
+  // Character counter
+  const comments = document.getElementById("00NVm000003SjdM");
+  const counter = document.getElementById("charCounter");
+  comments.addEventListener("input", () => {
+    counter.textContent = `${comments.value.length}/2000`;
+  });
 
-    const comments = document.getElementById("00NVm000003SjdM");
-    const counter = document.getElementById("charCounter");
-    comments.addEventListener("input", () => {
-      counter.textContent = `${comments.value.length}/2000`;
-    });
+  // URL param auto-fill course name
+  const urlParams = new URLSearchParams(window.location.search);
+  const courseValue = urlParams.get("course");
+  if (courseValue) {
+    document.getElementById("courseName").value = courseValue;
 
-    document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
-      const startDate = document.getElementById("startDate");
-      const endDate = document.getElementById("endDate");
-      const dateError = document.getElementById("dateError");
-
-      if (startDate.value && endDate.value) {
-        const sDate = new Date(startDate.value);
-        const eDate = new Date(endDate.value);
-
-        if (sDate > eDate) {
-          e.preventDefault();
-          dateError.style.display = "block";
-          return;
-        } else {
-          dateError.style.display = "none";
-        }
+    // Auto-select picklist if matching value exists
+    const picklist = document.getElementById("00NWA000002EHnp");
+    for (let option of picklist.options) {
+      if (option.value === courseValue) {
+        option.selected = true;
+        break;
       }
+    }
+  }
 
-      function formatDate(input, hidden) {
-        if (input.value) {
-          const d = new Date(input.value);
-          const mm = String(d.getMonth() + 1).padStart(2, "0");
-          const dd = String(d.getDate()).padStart(2, "0");
-          const yyyy = d.getFullYear();
-          hidden.value = `${mm}/${dd}/${yyyy}`;
-        }
+  // Date validation and formatting
+  document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    const dateError = document.getElementById("dateError");
+
+    if (startDate.value && endDate.value) {
+      const sDate = new Date(startDate.value);
+      const eDate = new Date(endDate.value);
+
+      if (sDate > eDate) {
+        e.preventDefault();
+        dateError.style.display = "block";
+        return;
+      } else {
+        dateError.style.display = "none";
       }
+    }
 
-      formatDate(startDate, document.getElementById("sfStartDate"));
-      formatDate(endDate, document.getElementById("sfEndDate"));
-    });
-  </script>
+    function formatDate(input, hidden) {
+      if (input.value) {
+        const d = new Date(input.value);
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        const yyyy = d.getFullYear();
+        hidden.value = `${mm}/${dd}/${yyyy}`;
+      }
+    }
+
+    formatDate(startDate, document.getElementById("sfStartDate"));
+    formatDate(endDate, document.getElementById("sfEndDate"));
+  });
+</script>
 </body>
 </html>
