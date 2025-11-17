@@ -42,7 +42,7 @@
       content: " *";
       color: red;
     }
-    input, select, textarea {
+    input, textarea {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
@@ -94,28 +94,22 @@
       margin-top: -8px; margin-bottom: 8px;
     }
   </style>
-
 </head>
+
 <body>
   <div class="form-container">
     <h2>Accredited Course Presentation Request - Siding</h2>
     <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
 
     <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
+
       <input type="hidden" name="orgid" value="00DWA000002ckDZ">
       <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
 
-      <!-- Picklist -->
-      <label for="00NWA000002EHnp" class="required">Which Siding Course Seminar are you Requesting?</label>
-      <select id="00NWA000002EHnp" name="00NWA000002EHnp" required>
-        <option value="">--None--</option>
-        <option value="Vinyl Siding: The Basics and Beyond (BSP15)">Vinyl Siding: The Basics and Beyond (BSP15)</option>
-        <option value="Flexible Flashing Tapes (SDG24_1)">Flexible Flashing Tapes (SDG24_1)</option>
-        <option value="Fully Adhered Water Resistive Barriers (SDG24_2)">Fully Adhered Water Resistive Barriers (SDG24_2)</option>
-        <option value="Specifying Fully Adhered Weather Protection Systems (RBE24_1)">Specifying Fully Adhered Weather Protection Systems (RBE24_1)</option>
-        <option value="Design and Installation Ideas with Cellular PVC (BSP61_A3)">Design and Installation Ideas with Cellular PVC (BSP61_A3)</option>
-      </select>
-
+	 <!-- Course value now stored here -->
+      <label for="00N0V000008zRGv" class="required">Course Name</label>
+      <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
+	  
       <label for="00N3w000008x6NN" class="required">Your Name</label>
       <input id="00N3w000008x6NN" maxlength="80" name="00N3w000008x6NN" type="text" required>
 
@@ -127,10 +121,6 @@
 
       <label for="00NWA000002EHe9" class="required">Firm/Business Name</label>
       <input id="00NWA000002EHe9" maxlength="80" name="00NWA000002EHe9" type="text" required>
-
-      <!-- This field now stores course selection -->
-      <label for="00N0V000008zRGv" class="required">Firm Address including city/state</label>
-      <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
 
       <label for="00NWA000002EHhN">Approximate Number of Attendees</label>
       <input id="00NWA000002EHhN" name="00NWA000002EHhN" type="number" min="0">
@@ -164,31 +154,11 @@
     counter.textContent = `${comments.value.length}/2000`;
   });
 
-  // URL course parameter logic - auto select or append dynamically
+  // Auto populate course name into Firm Address field only
   const urlParams = new URLSearchParams(window.location.search);
   const courseValue = urlParams.get("course");
 
   if (courseValue) {
-    const picklist = document.getElementById("00NWA000002EHnp");
-    let matchFound = false;
-
-    for (let option of picklist.options) {
-      if (option.value.toLowerCase().trim() === courseValue.toLowerCase().trim()) {
-        option.selected = true;
-        matchFound = true;
-        break;
-      }
-    }
-
-    if (!matchFound) {
-      const newOption = document.createElement("option");
-      newOption.value = courseValue;
-      newOption.textContent = courseValue + " (Custom)";
-      newOption.selected = true;
-      picklist.appendChild(newOption);
-    }
-
-    // Store course value into Firm Address field
     document.getElementById("00N0V000008zRGv").value = courseValue;
   }
 
