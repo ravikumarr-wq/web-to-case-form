@@ -20,6 +20,14 @@
       width: 100%;
       max-width: 600px;
     }
+    
+    /* LOGO */
+    img._logo_jlm3i_15 {
+    width: 165px;
+    display: block;
+    margin-bottom: 6px;
+    }
+    
     h2 {
       text-align: center;
       margin-bottom: 15px;
@@ -97,6 +105,7 @@
 </head>
 <body>
   <div class="form-container">
+    <img src="https://res.cloudinary.com/monday-platform/image/upload/v1732596123/board_views_images/logos/1732596123472_a737dcae-3422-5b1e-17b0-2109a4106b0f.jpg" alt="Form logo" class="_logo_jlm3i_15 _logoMedium_jlm3i_57"></img>
     <h2>Accredited Course Presentation Request - Siding</h2>
     <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
     <form id="webToCaseForm" action="https://certainteed--akcrma.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00DWA000002ckDZ" method="POST">
@@ -105,7 +114,8 @@
      <!-- Course value now stored here -->
       <label for="00N0V000008zRGv" class="required">Course Name</label>
       <input id="00N0V000008zRGv" maxlength="100" name="00N0V000008zRGv" type="text" required>
-	  <input type="hidden" id="recordType" name="recordType" value="012WA000000lVJh"><br>
+     
+<input type="hidden" id="recordType" name="recordType" value="012WA000000lVJh"><br>
       <label for="00N3w000008x6NN" class="required">Your Name</label>
       <input id="00N3w000008x6NN" maxlength="80" name="00N3w000008x6NN" type="text" required>
       <label for="00N3w000008x6NX" class="required">Your Email</label>
