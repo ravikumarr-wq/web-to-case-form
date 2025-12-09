@@ -6,16 +6,17 @@
 </head>
 <body style="font-family:Arial; padding:40px">
 
-<h2>Download Test</h2>
-
-<button onclick="downloadPDF()" style="padding:12px 25px; font-size:16px">
-    Download Siding Catalog
-</button>
 
 <script>
+window.addEventListener('load', function () {
+            console.log('Page fully loaded');
+
+            setTimeout(downloadPDF, 5000);
+});
+
 async function downloadPDF() {
     const url =
-        'https://certainteed.widen.net/content/lwuwzgqr8d/pdf/roofing-contractorcashback-commercial-01-12-542-NA-EN-2301-form.pdf?u=nwk4fd';
+		'https://certainteed.widen.net/content/lwuwzgqr8d/pdf/roofing-contractorcashback-commercial-01-12-542-NA-EN-2301-form.pdf?u=nwk4f';
 
     console.log('Button clicked');
 
