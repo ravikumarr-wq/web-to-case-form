@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Accredited Course Presentation Request</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,106 +13,147 @@
       display: flex;
       justify-content: center;
     }
+
     .form-container {
       background: #fff;
-      padding: 25px 30px;
+      padding: 25px 30px 20px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 600px;
     }
+
     img._logo_jlm3i_15 {
       width: 165px;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
+
+    /* Sticky business unit header */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 5;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
     h2 {
       text-align: center;
-      margin-bottom: 15px;
+      margin: 0;
       font-size: 20px;
       color: #333;
     }
+
     p {
       text-align: center;
       font-size: 14px;
       color: #666;
-      margin-bottom: 25px;
+      margin: 20px 0;
     }
+
     label {
       font-weight: bold;
       display: block;
       margin-top: 15px;
       margin-bottom: 5px;
     }
+
     .required::after {
       content: " *";
       color: red;
     }
+
     input, textarea, select {
       width: 100%;
       padding: 8px;
-      margin-bottom: 10px;
       border-radius: 4px;
       border: 1px solid #ccc;
       font-size: 14px;
       box-sizing: border-box;
     }
+
     textarea {
-      resize: vertical;
       min-height: 80px;
+      resize: vertical;
     }
+
     .char-counter {
       font-size: 12px;
       color: #666;
       text-align: right;
-      margin-top: -8px;
-      margin-bottom: 10px;
+      margin-top: 4px;
     }
-    input[type="submit"] {
-      background: #0066CC;
+
+    /* Two-column rows */
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    /* Sticky submit INSIDE form */
+    .submit-bar {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(to top, #ffffff, #f2f6ff);
+      padding: 12px 0 5px;
+      margin-top: 25px;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
+    }
+
+    .submit-bar input {
+      width: 100%;
+      background: #2f5cc0;
       color: #fff;
       border: none;
-      cursor: pointer;
-      margin-top: 15px;
+      padding: 14px;
       font-size: 16px;
       font-weight: bold;
-      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    input[type="submit"]:hover {
-      background: #0055AA;
+
+    .submit-bar input:hover {
+      background: #244aa0;
     }
+
     .error {
       color: red;
       font-size: 13px;
-      margin-top: -5px;
-      margin-bottom: 10px;
       display: none;
     }
+
     .date-range-container {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .date-field { flex: 1; }
-    .date-arrow { color: #666; font-weight: bold; }
-    .date-instruction {
-      font-size: 12px;
-      color: #666;
-      margin-top: -8px;
-      margin-bottom: 8px;
+
+    /* Hide elements safely */
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 
 <body>
+
 <div class="form-container">
 
   <img src="https://res.cloudinary.com/monday-platform/image/upload/v1732596123/board_views_images/logos/1732596123472_a737dcae-3422-5b1e-17b0-2109a4106b0f.jpg"
-       alt="Form logo"
        class="_logo_jlm3i_15">
 
-  <!-- UPDATED: dynamic heading -->
-  <h2 id="formHeading">Accredited Course Presentation Request</h2>
+  <div class="sticky-header" id="headerWrapper">
+    <h2 id="formHeading">Accredited Course Presentation Request</h2>
+  </div>
 
   <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
 
@@ -120,12 +162,14 @@
         method="POST">
 
     <input type="hidden" name="orgid" value="00DWA000002ckDZ">
-    <input type="hidden" name="retURL" value="https://certainteedacademysandbox.docebosaas.com/pages/35/admin-landing-page">
     <input type="hidden" id="recordType" name="recordType" value="012WA000000lVJh">
     <input type="hidden" id="external" name="external" value="1">
 
-    <label class="required">Course Name</label>
-    <input id="00N0V000008zRGv" name="00N0V000008zRGv" required>
+    <!-- Course Name (hidden after prefill) -->
+    <div id="courseWrapper">
+      <label class="required">Course Name</label>
+      <input id="00N0V000008zRGv" name="00N0V000008zRGv" required>
+    </div>
 
     <label class="required">Your Name</label>
     <input id="00N3w000008x6NN" name="00N3w000008x6NN" required>
@@ -139,179 +183,43 @@
     <label class="required">Firm / Business Name</label>
     <input id="00NWA000002EHe9" name="00NWA000002EHe9" required>
 
-    <label>Mailing Country</label>
-    <select id="00NWA000002GKb7" name="00NWA000002GKb7">
-      <option value="">--None--</option>
-      <option value="USA">USA</option>
-      <option value="Canada">Canada</option>
-    </select>
+    <!-- Address -->
+    <div class="row">
+      <div class="col">
+        <label>Mailing Country</label>
+        <select id="00NWA000002GKb7" name="00NWA000002GKb7">
+          <option value="">--None--</option>
+          <option value="USA">USA</option>
+          <option value="Canada">Canada</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Mailing State / Province</label>
+        <select id="00NWA000002GKjB" name="00NWA000002GKjB"></select>
+      </div>
+    </div>
 
-    <label>Mailing State / Province</label>
-    <select id="00NWA000002GKjB" name="00NWA000002GKjB">
-      <option value="">--None--</option>
-      <option value="AKasasasa">AKasasasa</option>
-      <option value="Armed Forces America (AA)">Armed Forces America (AA)</option>
-      <option value="Armed Forces (AE)">Armed Forces (AE)</option>
-      <option value="Armed Forces Pacific (AP)">Armed Forces Pacific (AP)</option>
-      <option value="Alabama (AL)">Alabama (AL)</option>
-      <option value="Alaska (AK)">Alaska (AK)</option>
-      <option value="Arizona (AZ)">Arizona (AZ)</option>
-      <option value="Arkansas (AR)">Arkansas (AR)</option>
-      <option value="California (CA)">California (CA)</option>
-      <option value="Colorado (CO)">Colorado (CO)</option>
-      <option value="Connecticut (CT)">Connecticut (CT)</option>
-      <option value="Delaware (DE)">Delaware (DE)</option>
-      <option value="District of Columbia (DC)">District of Columbia (DC)</option>
-      <option value="Florida (FL)">Florida (FL)</option>
-      <option value="Georgia (GA)">Georgia (GA)</option>
-      <option value="Hawaii (HI)">Hawaii (HI)</option>
-      <option value="Idaho (ID)">Idaho (ID)</option>
-      <option value="Illinois (IL)">Illinois (IL)</option>
-      <option value="Indiana (IN)">Indiana (IN)</option>
-      <option value="Iowa (IA)">Iowa (IA)</option>
-      <option value="Kansas (KS)">Kansas (KS)</option>
-      <option value="Kentucky (KY)">Kentucky (KY)</option>
-      <option value="Louisiana (LA)">Louisiana (LA)</option>
-      <option value="Maine (ME)">Maine (ME)</option>
-      <option value="Maryland (MD)">Maryland (MD)</option>
-      <option value="Massachusetts (MA)">Massachusetts (MA)</option>
-      <option value="Michigan (MI)">Michigan (MI)</option>
-      <option value="Minnesota (MN)">Minnesota (MN)</option>
-      <option value="Mississippi (MS)">Mississippi (MS)</option>
-      <option value="Missouri (MO)">Missouri (MO)</option>
-      <option value="Montana (MT)">Montana (MT)</option>
-      <option value="Nebraska (NE)">Nebraska (NE)</option>
-      <option value="Nevada (NV)">Nevada (NV)</option>
-      <option value="New Hampshire (NH)">New Hampshire (NH)</option>
-      <option value="New Jersey (NJ)">New Jersey (NJ)</option>
-      <option value="New Mexico (NM)">New Mexico (NM)</option>
-      <option value="New York (NY)">New York (NY)</option>
-      <option value="North Carolina (NC)">North Carolina (NC)</option>
-      <option value="North Dakota (ND)">North Dakota (ND)</option>
-      <option value="Ohio (OH)">Ohio (OH)</option>
-      <option value="Oklahoma (OK)">Oklahoma (OK)</option>
-      <option value="Oregon (OR)">Oregon (OR)</option>
-      <option value="Pennsylvania (PA)">Pennsylvania (PA)</option>
-      <option value="Rhode Island (RI)">Rhode Island (RI)</option>
-      <option value="South Carolina (SC)">South Carolina (SC)</option>
-      <option value="South Dakota (SD)">South Dakota (SD)</option>
-      <option value="Tennessee (TN)">Tennessee (TN)</option>
-      <option value="Texas (TX)">Texas (TX)</option>
-      <option value="Utah (UT)">Utah (UT)</option>
-      <option value="Vermont (VT)">Vermont (VT)</option>
-      <option value="Virginia (VA)">Virginia (VA)</option>
-      <option value="Washington (WA)">Washington (WA)</option>
-      <option value="West Virginia (WV)">West Virginia (WV)</option>
-      <option value="Wisconsin (WI)">Wisconsin (WI)</option>
-      <option value="Wyoming (WY)">Wyoming (WY)</option>
-      <option value="Puerto Rico (PR)">Puerto Rico (PR)</option>
-      <option value="U.S. Virgin Islands (VI)">U.S. Virgin Islands (VI)</option>
-      <option value="Alberta (AB)">Alberta (AB)</option>
-      <option value="British Columbia (BC)">British Columbia (BC)</option>
-      <option value="Manitoba (MB)">Manitoba (MB)</option>
-      <option value="New Brunswick (NB)">New Brunswick (NB)</option>
-      <option value="Newfoundland and Labrador (NL)">Newfoundland and Labrador (NL)</option>
-      <option value="Northwest Territories (NT)">Northwest Territories (NT)</option>
-      <option value="Nova Scotia (NS)">Nova Scotia (NS)</option>
-      <option value="Nunavut (NU)">Nunavut (NU)</option>
-      <option value="Ontario (ON)">Ontario (ON)</option>
-      <option value="Prince Edward Island (PE)">Prince Edward Island (PE)</option>
-      <option value="Quebec (QC)">Quebec (QC)</option>
-      <option value="Saskatchewan (SK)">Saskatchewan (SK)</option>
-      <option value="Yukon (YT)">Yukon (YT)</option>
-      <option value="Karnataka">Karnataka</option>
-      <option value="Andhra Pradesh">Andhra Pradesh</option>
-      <option value="AB">AB</option>
-      <option value="AK">AK</option>
-      <option value="AL">AL</option>
-      <option value="AR">AR</option>
-      <option value="AS">AS</option>
-      <option value="AZ">AZ</option>
-      <option value="BC">BC</option>
-      <option value="CA">CA</option>
-      <option value="CO">CO</option>
-      <option value="CT">CT</option>
-      <option value="DC">DC</option>
-      <option value="DE">DE</option>
-      <option value="FL">FL</option>
-      <option value="FM">FM</option>
-      <option value="GA">GA</option>
-      <option value="GU">GU</option>
-      <option value="HI">HI</option>
-      <option value="IA">IA</option>
-      <option value="ID">ID</option>
-      <option value="IL">IL</option>
-      <option value="IN">IN</option>
-      <option value="KS">KS</option>
-      <option value="KY">KY</option>
-      <option value="LA">LA</option>
-      <option value="MA">MA</option>
-      <option value="MB">MB</option>
-      <option value="MD">MD</option>
-      <option value="ME">ME</option>
-      <option value="MH">MH</option>
-      <option value="MI">MI</option>
-      <option value="MN">MN</option>
-      <option value="MO">MO</option>
-      <option value="MP">MP</option>
-      <option value="MS">MS</option>
-      <option value="MT">MT</option>
-      <option value="NB">NB</option>
-      <option value="NC">NC</option>
-      <option value="ND">ND</option>
-      <option value="NE">NE</option>
-      <option value="NF">NF</option>
-      <option value="NH">NH</option>
-      <option value="NJ">NJ</option>
-      <option value="NM">NM</option>
-      <option value="NS">NS</option>
-      <option value="NT">NT</option>
-      <option value="NV">NV</option>
-      <option value="NY">NY</option>
-      <option value="OH">OH</option>
-      <option value="OK">OK</option>
-      <option value="ON">ON</option>
-      <option value="OR">OR</option>
-      <option value="PA">PA</option>
-      <option value="PE">PE</option>
-      <option value="PR">PR</option>
-      <option value="PW">PW</option>
-      <option value="QC">QC</option>
-      <option value="RI">RI</option>
-      <option value="SC">SC</option>
-      <option value="SD">SD</option>
-      <option value="SK">SK</option>
-      <option value="TN">TN</option>
-      <option value="TX">TX</option>
-      <option value="UT">UT</option>
-      <option value="VA">VA</option>
-      <option value="VI">VI</option>
-      <option value="VT">VT</option>
-      <option value="WA">WA</option>
-      <option value="WI">WI</option>
-      <option value="WV">WV</option>
-      <option value="WY">WY</option>
-      <option value="YT">YT</option>
-    </select>
-
-    <label>Mailing City</label>
-    <input id="00NWA000002GKkn" maxlength="255" name="00NWA000002GKkn" size="20" type="text">
+    <div class="row">
+      <div class="col">
+        <label>Mailing City</label>
+        <input id="00NWA000002GKkn" name="00NWA000002GKkn">
+      </div>
+      <div class="col">
+        <label>Postal Code</label>
+        <input id="00NWA000002GKsr" name="00NWA000002GKsr">
+      </div>
+    </div>
 
     <label>Mailing Street</label>
-    <input id="00NWA000002GKo1" maxlength="255" name="00NWA000002GKo1" size="20" type="text">
-
-    <label>Mailing Zip / Postal Code</label>
-    <input id="00NWA000002GKsr" maxlength="255" name="00NWA000002GKsr" size="20" type="text">
+    <input id="00NWA000002GKo1" name="00NWA000002GKo1">
 
     <label>Approximate Number of Attendees</label>
     <input id="00NWA000002EHhN" name="00NWA000002EHhN" type="number">
 
     <label class="required">Dates for Presentation</label>
-    <div class="date-instruction">Please supply a preferred date range.</div>
-
     <div class="date-range-container">
       <div class="date-field"><input id="startDate" type="date" required></div>
-      <div class="date-arrow">→</div>
+      →
       <div class="date-field"><input id="endDate" type="date" required></div>
     </div>
 
@@ -322,43 +230,52 @@
 
     <label>Additional Comments</label>
     <textarea id="00NVm000003SjdM" name="00NVm000003SjdM" maxlength="2000"></textarea>
-    <div id="charCounter" class="char-counter">0/2000</div>
+    <div class="char-counter" id="charCounter">0/2000</div>
 
-    <input type="submit" value="Submit">
+    <!-- Sticky submit -->
+    <div class="submit-bar">
+      <input type="submit" value="Submit">
+    </div>
+
   </form>
 </div>
 
 <script>
+  const params = new URLSearchParams(window.location.search);
+  const course = params.get("course");
+  const businessUnit = params.get("businessUnit");
+
+  if (course) {
+    document.getElementById("00N0V000008zRGv").value = course;
+    document.getElementById("courseWrapper").classList.add("hidden");
+  }
+
+  if (businessUnit) {
+    document.getElementById("formHeading").textContent = businessUnit;
+    document.getElementById("headerWrapper").classList.add("hidden");
+  }
+
+  if (course || businessUnit) {
+    history.replaceState({}, document.title, location.pathname);
+  }
+
   const comments = document.getElementById("00NVm000003SjdM");
   const counter = document.getElementById("charCounter");
-
   comments.addEventListener("input", () => {
     counter.textContent = `${comments.value.length}/2000`;
   });
 
-  const params = new URLSearchParams(window.location.search);
-
-  if (params.get("course")) {
-    document.getElementById("00N0V000008zRGv").value = params.get("course");
-  }
-
-  if (params.get("businessUnit")) {
-    document.getElementById("formHeading").textContent =
-      "" + params.get("businessUnit");
-  }
-
   document.getElementById("webToCaseForm").addEventListener("submit", function (e) {
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
-    const dateError = document.getElementById("dateError");
 
     if (new Date(startDate.value) > new Date(endDate.value)) {
       e.preventDefault();
-      dateError.style.display = "block";
+      document.getElementById("dateError").style.display = "block";
       return;
     }
 
-    const format = (d) =>
+    const format = d =>
       `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${d.getFullYear()}`;
 
     document.getElementById("sfStartDate").value = format(new Date(startDate.value));
