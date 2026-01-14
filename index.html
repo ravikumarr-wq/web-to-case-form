@@ -26,22 +26,12 @@
     img._logo_jlm3i_15 {
       width: 165px;
       display: block;
-      margin-bottom: 10px;
-    }
-
-    /* Sticky business unit header */
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 5;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      margin: 0 auto 10px;
     }
 
     h2 {
       text-align: center;
-      margin: 0;
+      margin-bottom: 10px;
       font-size: 20px;
       color: #333;
     }
@@ -50,7 +40,7 @@
       text-align: center;
       font-size: 14px;
       color: #666;
-      margin: 20px 0;
+      margin-bottom: 25px;
     }
 
     label {
@@ -75,15 +65,8 @@
     }
 
     textarea {
-      min-height: 80px;
       resize: vertical;
-    }
-
-    .char-counter {
-      font-size: 12px;
-      color: #666;
-      text-align: right;
-      margin-top: 4px;
+      min-height: 80px;
     }
 
     /* Two-column rows */
@@ -96,15 +79,40 @@
       flex: 1;
     }
 
+    /* Dates */
+    .date-range-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-field {
+      flex: 1;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      display: none;
+      margin-top: 5px;
+    }
+
+    .char-counter {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+      margin-top: 4px;
+    }
+
     /* Sticky submit INSIDE form */
     .submit-bar {
       position: sticky;
       bottom: 0;
-      background: linear-gradient(to top, #ffffff, #f2f6ff);
-      padding: 12px 0 5px;
+      background: linear-gradient(to top, #ffffff, #eef2ff);
+      padding: 12px 0;
       margin-top: 25px;
       border-top: 1px solid #ddd;
-      box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.12);
     }
 
     .submit-bar input {
@@ -122,25 +130,6 @@
     .submit-bar input:hover {
       background: #244aa0;
     }
-
-    .error {
-      color: red;
-      font-size: 13px;
-      display: none;
-    }
-
-    .date-range-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .date-field { flex: 1; }
-
-    /* Hide elements safely */
-    .hidden {
-      display: none !important;
-    }
   </style>
 </head>
 
@@ -151,9 +140,7 @@
   <img src="https://res.cloudinary.com/monday-platform/image/upload/v1732596123/board_views_images/logos/1732596123472_a737dcae-3422-5b1e-17b0-2109a4106b0f.jpg"
        class="_logo_jlm3i_15">
 
-  <div class="sticky-header" id="headerWrapper">
-    <h2 id="formHeading">Accredited Course Presentation Request</h2>
-  </div>
+  <h2 id="formHeading">Accredited Course Presentation Request</h2>
 
   <p>Complete this form to request an in-person, instructor-led training/seminar for your firm or business.</p>
 
@@ -165,11 +152,8 @@
     <input type="hidden" id="recordType" name="recordType" value="012WA000000lVJh">
     <input type="hidden" id="external" name="external" value="1">
 
-    <!-- Course Name (hidden after prefill) -->
-    <div id="courseWrapper">
-      <label class="required">Course Name</label>
-      <input id="00N0V000008zRGv" name="00N0V000008zRGv" required>
-    </div>
+    <label class="required">Course Name</label>
+    <input id="00N0V000008zRGv" name="00N0V000008zRGv" required>
 
     <label class="required">Your Name</label>
     <input id="00N3w000008x6NN" name="00N3w000008x6NN" required>
@@ -183,7 +167,7 @@
     <label class="required">Firm / Business Name</label>
     <input id="00NWA000002EHe9" name="00NWA000002EHe9" required>
 
-    <!-- Address -->
+    <!-- Address: 3 rows -->
     <div class="row">
       <div class="col">
         <label>Mailing Country</label>
@@ -193,6 +177,7 @@
           <option value="Canada">Canada</option>
         </select>
       </div>
+
       <div class="col">
         <label>Mailing State / Province</label>
         <select id="00NWA000002GKjB" name="00NWA000002GKjB"></select>
@@ -204,6 +189,7 @@
         <label>Mailing City</label>
         <input id="00NWA000002GKkn" name="00NWA000002GKkn">
       </div>
+
       <div class="col">
         <label>Postal Code</label>
         <input id="00NWA000002GKsr" name="00NWA000002GKsr">
@@ -242,25 +228,19 @@
 
 <script>
   const params = new URLSearchParams(window.location.search);
-  const course = params.get("course");
-  const businessUnit = params.get("businessUnit");
 
-  if (course) {
-    document.getElementById("00N0V000008zRGv").value = course;
-    document.getElementById("courseWrapper").classList.add("hidden");
+  if (params.get("course")) {
+    document.getElementById("00N0V000008zRGv").value = params.get("course");
   }
 
-  if (businessUnit) {
-    document.getElementById("formHeading").textContent = businessUnit;
-    document.getElementById("headerWrapper").classList.add("hidden");
-  }
-
-  if (course || businessUnit) {
-    history.replaceState({}, document.title, location.pathname);
+  if (params.get("businessUnit")) {
+    document.getElementById("formHeading").textContent =
+      "Accredited Course Presentation Request - " + params.get("businessUnit");
   }
 
   const comments = document.getElementById("00NVm000003SjdM");
   const counter = document.getElementById("charCounter");
+
   comments.addEventListener("input", () => {
     counter.textContent = `${comments.value.length}/2000`;
   });
