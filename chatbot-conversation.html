@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chatbot Flow Diagram</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'DM Sans','Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#F1F5F9 0%,#EFF6FF 50%,#FAF5FF 100%);
+  min-height:100vh; padding:32px 20px 48px; color:#0F172A;
+}
+.header{text-align:center;margin-bottom:28px;}
+.header-eyebrow{font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.header h1{font-size:28px;font-weight:900;letter-spacing:-.03em;margin-bottom:6px;}
+.header p{font-size:13px;color:#64748B;}
+
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;}
+.tab{padding:8px 20px;border-radius:999px;border:2.5px solid;font-size:12px;font-weight:700;cursor:pointer;background:transparent;transition:all .15s ease;}
+.tab.active{color:#fff!important;}
+
+.flows-grid{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;align-items:flex-start;max-width:1500px;margin:0 auto;}
+.flow-col-sm{flex:1 1 280px;max-width:320px;}
+.flow-col-md{flex:1 1 400px;max-width:460px;}
+.flow-col-lg{flex:2 1 600px;max-width:740px;}
+
+.flow-card{background:#fff;border:2px solid;border-top-width:4px;border-radius:16px;padding:24px 20px;box-shadow:0 4px 24px rgba(0,0,0,.07);position:relative;}
+.flow-badge{position:absolute;top:-12px;right:16px;color:#fff;font-size:10px;font-weight:700;padding:2px 12px;border-radius:999px;}
+
+.section-title{text-align:center;margin-bottom:20px;}
+.section-pill{display:inline-flex;align-items:center;gap:8px;border:1.5px solid;border-radius:999px;padding:5px 18px;}
+.section-pill-dot{width:8px;height:8px;border-radius:50%;}
+.section-pill span{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;}
+.section-subtitle{font-size:12px;color:#64748B;margin-top:5px;}
+
+.col{display:flex;flex-direction:column;align-items:center;}
+.node{border:2px solid;display:flex;align-items:center;justify-content:center;text-align:center;}
+.node-rounded{border-radius:12px;padding:10px 16px;min-width:158px;max-width:200px;}
+.node-pill{border-radius:999px;padding:10px 22px;min-width:160px;max-width:210px;}
+.node-diamond-wrap{display:flex;align-items:center;justify-content:center;width:110px;height:110px;position:relative;flex-shrink:0;}
+.node-diamond{width:86px;height:86px;border:2.5px solid;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;position:absolute;}
+.node-diamond-inner{transform:rotate(-45deg);font-size:10px;font-weight:700;text-align:center;padding:4px;line-height:1.2;width:72px;}
+.node-icon{font-size:16px;margin-bottom:2px;}
+.node-label{font-size:11px;font-weight:700;line-height:1.3;}
+.node-sub{font-size:10px;margin-top:2px;line-height:1.2;opacity:.72;}
+
+/* Straight grey arrows */
+.arrow-straight{display:flex;flex-direction:column;align-items:center;height:36px;justify-content:center;}
+.arr-line{width:2px;flex:1;background:#B0BCCC;min-height:16px;}
+.arr-head{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #B0BCCC;}
+
+/* SVG decision connector */
+.dc-svg-area{position:relative;width:100%;flex-shrink:0;}
+.dc-svg-area svg{display:block;width:100%;height:100%;}
+
+/* YES / NO circle badges */
+.badge-yes,.badge-no{
+  position:absolute;
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;
+  font-size:9px;font-weight:900;letter-spacing:.03em;
+  border:2.5px solid #fff;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.badge-yes{background:#16A34A;color:#fff;}
+.badge-no {background:#DC2626;color:#fff;}
+
+.dc-branches{display:flex;flex-direction:row;align-items:flex-start;justify-content:center;width:100%;}
+.dc-branch{display:flex;flex-direction:column;align-items:center;}
+
+.old-badge{background:#FEF2F2;border:1.5px dashed #EF4444;border-radius:10px;padding:6px 14px;font-size:10px;font-weight:700;color:#EF4444;text-align:center;margin-bottom:8px;}
+.new-badge{background:#F0FDF4;border:1.5px solid #22C55E;border-radius:10px;padding:6px 14px;font-size:10px;font-weight:700;color:#15803D;text-align:center;margin-bottom:8px;}
+
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:14px 24px;background:#F8FAFC;border-radius:12px;border:1.5px solid #E2E8F0;max-width:760px;margin:32px auto 0;}
+.legend-title{font-size:11px;font-weight:800;color:#334155;align-self:center;margin-right:4px;}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-dot{width:12px;height:12px;border-radius:3px;}
+.legend-item span{font-size:11px;color:#64748B;font-weight:500;}
+.footer-note{text-align:center;margin-top:16px;font-size:11px;color:#94A3B8;}
+
+.flow-section{display:none;}
+.flow-section.visible{display:flex;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Chatbot System Architecture</div>
+  <h1>User &amp; Agent Flow Diagram</h1>
+  <p>End-to-end flows for chatbot interactions — Figma reference</p>
+</div>
+
+<!--<div class="tabs">-->
+  <!--<button class="tab active" style="border-color:#0891B2;color:#0891B2" data-target="all"   onclick="switchTab(this,'all')">All Flows</button>-->
+<!--  <button class="tab"        style="border-color:#3B82F6;color:#3B82F6" data-target="flow1" onclick="switchTab(this,'flow1')">Flow 1: First-Time User</button>-->
+<!--  <button class="tab"        style="border-color:#F97316;color:#F97316" data-target="flow2" onclick="switchTab(this,'flow2')">Flow 2: Returning User</button>-->
+<!--  <button class="tab"        style="border-color:#A855F7;color:#A855F7" data-target="flow3" onclick="switchTab(this,'flow3')">Flow 3: Agent View</button>-->
+<!--</div>-->
+
+<div class="flows-grid">
+
+<!-- ══════════════════════════════
+     FLOW 1 — FIRST-TIME USER
+══════════════════════════════ -->
+<div class="flow-col-sm flow-section visible" id="flow1">
+  <div class="flow-card" style="border-color:#3B82F644;border-top-color:#3B82F6;">
+    <div class="flow-badge" style="background:#3B82F6;">FLOW 1</div>
+    <div class="section-title">
+      <div class="section-pill" style="border-color:#3B82F6;background:#EEF6FF;">
+        <div class="section-pill-dot" style="background:#3B82F6;"></div>
+        <span style="color:#1E40AF;">First-Time User</span>
+      </div>
+      <div class="section-subtitle">New visitor starts a chat session</div>
+    </div>
+    <div class="col">
+      <div class="node node-pill" style="border-color:#1E293B;background:#1E293B;min-width:190px;"><div><div class="node-icon">🌐</div><div class="node-label" style="color:#fff;">User Visits Website</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;"><div><div class="node-icon">💬</div><div class="node-label" style="color:#1E40AF;">Opens Chatbot Widget</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;"><div><div class="node-icon">📋</div><div class="node-label" style="color:#713F12;">Bot Collects Info</div><div class="node-sub" style="color:#713F12;">Name · Email · Phone</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;"><div><div class="node-icon">🔗</div><div class="node-label" style="color:#14532D;">System Creates / Tags</div><div class="node-sub" style="color:#14532D;">Messaging End User by Email</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;"><div><div class="node-icon">🗂️</div><div class="node-label" style="color:#1E40AF;">Select Service Type</div><div class="node-sub" style="color:#1E40AF;">Billing · Tech · Support…</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;"><div><div class="node-icon">✏️</div><div class="node-label" style="color:#713F12;">Describe the Issue</div><div class="node-sub" style="color:#713F12;">Short description input</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;"><div><div class="node-icon">🤖</div><div class="node-label" style="color:#1E40AF;">Conversation with Bot</div><div class="node-sub" style="color:#1E40AF;">Back-and-forth messages</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;"><div><div class="node-icon">💾</div><div class="node-label" style="color:#14532D;">Session Saved</div><div class="node-sub" style="color:#14532D;">Linked to Messaging User</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-pill" style="border-color:#0F172A;background:#0F172A;min-width:190px;"><div><div class="node-icon">✅</div><div class="node-label" style="color:#fff;">Chat Ends</div></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     FLOW 2 — RETURNING USER
+══════════════════════════════ -->
+<div class="flow-col-lg flow-section visible" id="flow2">
+  <div class="flow-card" style="border-color:#F9731622;border-top-color:#F97316;">
+    <div class="flow-badge" style="background:#F97316;">FLOW 2</div>
+    <div class="section-title">
+      <div class="section-pill" style="border-color:#F97316;background:#FFF7ED;">
+        <div class="section-pill-dot" style="background:#F97316;"></div>
+        <span style="color:#9A3412;">Returning User</span>
+      </div>
+      <div class="section-subtitle">Previously chatted user comes back</div>
+    </div>
+    <div class="col">
+      <div class="node node-pill" style="border-color:#1E293B;background:#1E293B;min-width:190px;"><div><div class="node-icon">🌐</div><div class="node-label" style="color:#fff;">User Visits Website</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;"><div><div class="node-icon">💬</div><div class="node-label" style="color:#1E40AF;">Opens Chatbot Widget</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;"><div><div class="node-icon">🔍</div><div class="node-label" style="color:#14532D;">System Checks Email</div><div class="node-sub" style="color:#14532D;">Lookup existing Messaging User</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+
+      <!-- DECISION 1: Existing User? -->
+      <div class="node-diamond-wrap">
+        <div class="node-diamond" style="border-color:#F97316;background:#FFF7ED;">
+          <div class="node-diamond-inner" style="color:#9A3412;">Existing User?</div>
+        </div>
+      </div>
+
+      <!-- L-shaped orthogonal arrows: horizontal then vertical down -->
+      <div class="dc-svg-area" style="height:100px;">
+        <svg viewBox="0 0 620 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="mh1" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="90">
+              <polygon points="0 0,10 4,0 8" fill="#DC2626"/>
+            </marker>
+            <marker id="mh2" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="90">
+              <polygon points="0 0,10 4,0 8" fill="#DC2626"/>
+            </marker>
+          </defs>
+          <!-- YES: left corner of diamond → go left → go down -->
+          <polyline points="310,5 140,5 140,100" stroke="#DC2626" stroke-width="3" fill="none" stroke-linejoin="round"/>
+          <polygon points="134,92 140,100 146,92" fill="#DC2626"/>
+          <!-- NO: right corner → go right → go down -->
+          <polyline points="310,5 480,5 480,100" stroke="#DC2626" stroke-width="3" fill="none" stroke-linejoin="round"/>
+          <polygon points="474,92 480,100 486,92" fill="#DC2626"/>
+        </svg>
+        <!-- YES badge sits on the left horizontal segment -->
+        <div class="badge-yes" style="left:24%;top:12%;">YES</div>
+        <!-- NO badge sits on the right horizontal segment -->
+        <div class="badge-no"  style="left:76%;top:12%;">NO</div>
+      </div>
+
+      <!-- Decision 1 branches -->
+      <div class="dc-branches" style="gap:16px;">
+
+        <!-- YES: existing user tree (left, wide) -->
+        <div class="dc-branch" style="flex:0 0 370px;">
+          <div class="col" style="width:100%;align-items:center;">
+            <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:172px;"><div><div class="node-icon">❓</div><div class="node-label" style="color:#1E40AF;">Show Options to User</div><div class="node-sub" style="color:#1E40AF;">Previous / New conversation</div></div></div>
+            <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+
+            <!-- DECISION 2: View Previous? -->
+            <div class="node-diamond-wrap">
+              <div class="node-diamond" style="border-color:#F97316;background:#FFF7ED;">
+                <div class="node-diamond-inner" style="color:#9A3412;">View Previous?</div>
+              </div>
+            </div>
+
+            <!-- L-shaped orthogonal arrows for "View Previous?" -->
+            <div class="dc-svg-area" style="height:100px;width:100%;">
+              <svg viewBox="0 0 360 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="mh3" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="90">
+                    <polygon points="0 0,10 4,0 8" fill="#DC2626"/>
+                  </marker>
+                  <marker id="mh4" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="90">
+                    <polygon points="0 0,10 4,0 8" fill="#DC2626"/>
+                  </marker>
+                </defs>
+                <!-- YES: left horizontal then down -->
+                <polyline points="180,5 78,5 78,100" stroke="#DC2626" stroke-width="3" fill="none" stroke-linejoin="round"/>
+                <polygon points="72,92 78,100 84,92" fill="#DC2626"/>
+                <!-- NO: right horizontal then down -->
+                <polyline points="180,5 282,5 282,100" stroke="#DC2626" stroke-width="3" fill="none" stroke-linejoin="round"/>
+                <polygon points="276,92 282,100 288,92" fill="#DC2626"/>
+              </svg>
+              <div class="badge-yes" style="left:22%;top:12%;">YES</div>
+              <div class="badge-no"  style="left:78%;top:12%;">NO</div>
+            </div>
+
+            <!-- Sub-branches -->
+            <div class="dc-branches" style="gap:10px;width:100%;">
+
+              <!-- YES: view previous -->
+              <div class="dc-branch" style="flex:0 0 168px;">
+                <div class="col" style="align-items:center;">
+                  <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:152px;"><div><div class="node-icon">🗂️</div><div class="node-label" style="color:#1E40AF;">Select Service Type</div><div class="node-sub" style="color:#1E40AF;">Filter past conversations</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:152px;"><div><div class="node-icon">⚙️</div><div class="node-label" style="color:#14532D;">Fetch Conversations</div><div class="node-sub" style="color:#14532D;">Backend: email + service</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:152px;"><div><div class="node-icon">📄</div><div class="node-label" style="color:#713F12;">Show Summary Previews</div><div class="node-sub" style="color:#713F12;">Type · Description · Count</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:152px;"><div><div class="node-icon">👆</div><div class="node-label" style="color:#1E40AF;">User Picks a Preview</div><div class="node-sub" style="color:#1E40AF;">Enter conversation number</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:152px;"><div><div class="node-icon">📜</div><div class="node-label" style="color:#713F12;">Full Conversation Shown</div><div class="node-sub" style="color:#713F12;">Complete chat history</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-pill" style="border-color:#0F172A;background:#0F172A;min-width:152px;"><div><div class="node-icon">✅</div><div class="node-label" style="color:#fff;">Session Ends</div></div></div>
+                </div>
+              </div>
+
+              <!-- NO: start new chat -->
+              <div class="dc-branch" style="flex:0 0 168px;">
+                <div class="col" style="align-items:center;">
+                  <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:152px;"><div><div class="node-icon">➕</div><div class="node-label" style="color:#1E40AF;">Start New Chat</div><div class="node-sub" style="color:#1E40AF;">Email already known</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:152px;"><div><div class="node-icon">🗂️</div><div class="node-label" style="color:#1E40AF;">Select Service Type</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:152px;"><div><div class="node-icon">✏️</div><div class="node-label" style="color:#713F12;">Describe Issue</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:152px;"><div><div class="node-icon">🤖</div><div class="node-label" style="color:#1E40AF;">Conversation with Bot</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:152px;"><div><div class="node-icon">💾</div><div class="node-label" style="color:#14532D;">New Session Saved</div></div></div>
+                  <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+                  <div class="node node-pill" style="border-color:#0F172A;background:#0F172A;min-width:152px;"><div><div class="node-icon">✅</div><div class="node-label" style="color:#fff;">Chat Ends</div></div></div>
+                </div>
+              </div>
+
+            </div><!-- /sub-branches -->
+          </div>
+        </div><!-- /YES existing -->
+
+        <!-- NO: brand new user (right) -->
+        <div class="dc-branch" style="flex:0 0 178px;">
+          <div class="col" style="align-items:center;">
+            <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:164px;"><div><div class="node-icon">📋</div><div class="node-label" style="color:#713F12;">Collect Name / Email / Phone</div></div></div>
+            <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+            <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:164px;"><div><div class="node-icon">🔗</div><div class="node-label" style="color:#14532D;">Create Messaging User</div></div></div>
+            <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+            <div class="node node-rounded" style="border-color:#3B82F6;background:#EEF6FF;min-width:164px;"><div><div class="node-icon">↩️</div><div class="node-label" style="color:#1E40AF;">→ Follow Flow 1</div><div class="node-sub" style="color:#1E40AF;">Select service, describe, chat</div></div></div>
+          </div>
+        </div>
+
+      </div><!-- /Decision 1 branches -->
+    </div>
+  </div>
+</div><!-- /flow2 -->
+
+
+<!-- ══════════════════════════════
+     FLOW 3 — AGENT VIEW
+══════════════════════════════ -->
+<div class="flow-col-md flow-section visible" id="flow3">
+  <div class="flow-card" style="border-color:#A855F722;border-top-color:#A855F7;">
+    <div class="flow-badge" style="background:#A855F7;">FLOW 3</div>
+    <div class="section-title">
+      <div class="section-pill" style="border-color:#A855F7;background:#FDF4FF;">
+        <div class="section-pill-dot" style="background:#A855F7;"></div>
+        <span style="color:#581C87;">Agent View</span>
+      </div>
+      <div class="section-subtitle">Support agent reviews customer conversations</div>
+    </div>
+    <div class="col">
+      <div class="node node-pill" style="border-color:#1E293B;background:#1E293B;min-width:210px;"><div><div class="node-icon">👤</div><div class="node-label" style="color:#fff;">Agent Logs In</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#A855F7;background:#FDF4FF;min-width:210px;"><div><div class="node-icon">📋</div><div class="node-label" style="color:#581C87;">Messaging Users List</div><div class="node-sub" style="color:#581C87;">All end users visible</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+      <div class="node node-rounded" style="border-color:#A855F7;background:#FDF4FF;min-width:210px;"><div><div class="node-icon">👆</div><div class="node-label" style="color:#581C87;">Click on End User Record</div><div class="node-sub" style="color:#581C87;">Opens Messaging User detail</div></div></div>
+      <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;justify-content:center;width:100%;">
+        <!-- OLD -->
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div class="old-badge">❌ OLD (Standard)</div>
+          <div class="node node-rounded" style="border-color:#A855F7;background:#FDF4FF;min-width:160px;"><div><div class="node-icon">📑</div><div class="node-label" style="color:#581C87;">'Related' Tab</div><div class="node-sub" style="color:#581C87;">Messaging Sessions list</div></div></div>
+          <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+          <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:160px;"><div><div class="node-icon">🔍</div><div class="node-label" style="color:#713F12;">One Session at a Time</div><div class="node-sub" style="color:#713F12;">No unified view</div></div></div>
+        </div>
+
+        <div style="font-size:22px;padding-top:52px;align-self:flex-start;">➡️</div>
+
+        <!-- NEW -->
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div class="new-badge">✅ NEW (Custom LWC)</div>
+          <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:174px;"><div><div class="node-icon">🆕</div><div class="node-label" style="color:#14532D;">New 'Conversations' Tab</div><div class="node-sub" style="color:#14532D;">Custom LWC next to Details</div></div></div>
+          <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+          <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:174px;"><div><div class="node-icon">📂</div><div class="node-label" style="color:#14532D;">Sidebar: All Conversations</div><div class="node-sub" style="color:#14532D;">Listed with description + service</div></div></div>
+          <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+          <div class="node node-rounded" style="border-color:#22C55E;background:#F0FDF4;min-width:174px;"><div><div class="node-icon">⚡</div><div class="node-label" style="color:#14532D;">Auto-Opens Most Recent</div><div class="node-sub" style="color:#14532D;">Like ChatGPT sidebar UX</div></div></div>
+          <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+          <div class="node node-rounded" style="border-color:#EAB308;background:#FFFBEB;min-width:174px;"><div><div class="node-icon">📜</div><div class="node-label" style="color:#713F12;">Agent Selects Any Conv.</div><div class="node-sub" style="color:#713F12;">Full chat transcript shown</div></div></div>
+          <div class="arrow-straight"><div class="arr-line"></div><div class="arr-head"></div></div>
+          <div class="node node-pill" style="border-color:#0F172A;background:#0F172A;min-width:174px;"><div><div class="node-icon">✅</div><div class="node-label" style="color:#fff;">Review Done</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /flow3 -->
+
+</div><!-- /flows-grid -->
+
+<!--<div class="legend">-->
+<!--  <span class="legend-title">LEGEND</span>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#1E293B;"></div><span>Start / End</span></div>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#3B82F6;"></div><span>User Action</span></div>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#22C55E;"></div><span>System / Backend</span></div>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#F97316;"></div><span>Decision Point</span></div>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#EAB308;"></div><span>Data Input / Output</span></div>-->
+<!--  <div class="legend-item"><div class="legend-dot" style="background:#A855F7;"></div><span>Agent View</span></div>-->
+<!--  <div class="legend-item">-->
+<!--    <div style="width:32px;height:4px;border-radius:2px;background:#DC2626;"></div>-->
+<!--    <span>YES / NO Decision Path</span>-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div class="footer-note">🔴 Red L-shaped arrows = decision branches &nbsp;·&nbsp; 🟢 YES badge (green) &nbsp;·&nbsp; 🔴 NO badge (red)</div>-->
+
+<script>
+const tabColors={all:'#0891B2',flow1:'#3B82F6',flow2:'#F97316',flow3:'#A855F7'};
+function switchTab(btn,target){
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.remove('active');
+    t.style.background='transparent';
+    t.style.color=tabColors[t.dataset.target];
+  });
+  btn.classList.add('active');
+  btn.style.background=tabColors[target];
+  btn.style.color='#fff';
+  document.querySelectorAll('.flow-section').forEach(s=>s.classList.remove('visible'));
+  if(target==='all'){document.querySelectorAll('.flow-section').forEach(s=>s.classList.add('visible'));}
+  else{document.getElementById(target).classList.add('visible');}
+}
+</script>
+</body>
+</html>
